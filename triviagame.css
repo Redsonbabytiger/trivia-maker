@@ -1,0 +1,259 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#game-container {
+  background: #16213e;
+  border-radius: 16px;
+  padding: 40px;
+  width: 600px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+#start-screen {
+  text-align: center;
+  display: block;
+}
+
+#start-screen h1 {
+  font-size: 2.5rem;
+  color: #e94560;
+  margin-bottom: 12px;
+}
+
+#start-screen p {
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+#difficulty-screen {
+  text-align: center;
+  display: none;
+}
+
+#difficulty-screen h1 {
+  font-size: 2.5rem;
+  color: #e94560;
+  margin-bottom: 12px;
+}
+
+#difficulty-screen p {
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+#custom-questions-screen {
+  text-align: center;
+  display: none;
+}
+
+#custom-questions-screen h1 {
+  font-size: 2.5rem;
+  color: #e94560;
+  margin-bottom: 12px;
+}
+
+#custom-questions-screen p {
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+#custom-questions-screen input {
+  background: #0f3460;
+  border: 2px solid #1a4a8a;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  padding: 12px 16px;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+#custom-questions-screen input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+#custom-questions-container {
+  display: flex;flex-direction: column;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+#custom-answers {
+  margin: 10px auto;
+  padding: 10px;
+  width: 80%;
+  border-radius: 8px;
+  border: 1px solid #0f3460;
+}
+
+#category-screen {
+  display: none;
+  text-align: center;
+  gap: 20px;
+  flex-direction: column;
+}
+
+#category-screen h1 {
+  font-size: 2.5rem;
+  color: #e94560;
+  margin-bottom: 12px;
+}
+
+#category-screen button {
+  background: #0f3460;
+  border: 2px solid #1a4a8a;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 14px 30px;
+  transition: all 0.2s ease;
+}
+
+#category-screen button:hover {
+  background: #1a4a8a;
+  border-color: #e94560;
+}
+
+#question-screen {
+  display: none;
+}
+#end-screen {
+  display: none;
+  text-align: center;
+}
+.progress-bar-container {
+  background: #0f3460;
+  border-radius: 10px;
+  height: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+#progress-bar {
+  height: 100%;
+  background: #e94560;
+  width: 0%;
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+#question-counter {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+#question-text {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  color: #fff;
+}
+#answer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.answer-btn {
+  background: #0f3460;
+  border: 2px solid #1a4a8a;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 14px 20px;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+.answer-btn:hover {
+  background: #1a4a8a;
+  border-color: #e94560;
+}
+.answer-btn.correct {
+  background: #1a6b3c;
+  border-color: #2ecc71;
+}
+.answer-btn.incorrect {
+  background: #6b1a1a;
+  border-color: #e74c3c;
+}
+#feedback-text {
+  margin-top: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 24px;
+  color: #2ecc71;
+}
+
+#score-display {
+  font-size: 1rem;
+  color: #aaa;
+  margin-top: 20px;
+  text-align: right;
+}
+
+#score-display span {
+  color: #e94560;
+  font-weight: bold;
+}
+
+.big-btn {
+  background: #e94560;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 40px;
+  transition: background 0.2s ease;
+  margin-top: 16px;
+}
+
+.big-btn:hover {
+  background: #c73652;
+}
+
+#end-screen h2 {
+  font-size: 2rem;
+  color: #e94560;
+  margin-bottom: 12px;
+}
+
+#final-score-text {
+  font-size: 1.3rem;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+#end-message {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+#timer-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e94560;
+  text-align: right;
+  margin-bottom: 10px;
+  min-height: 36px;
+}
+
+.hidden-feature {
+  display: none;
+  color: #50C878;
+}
