@@ -57,6 +57,7 @@ fetchBaseQuestions().then(fetchedQuestions => {
 let currentQuestionIndex;
 let currentQuestionSet; // will hold the filtered questions based on difficulty
 let currentDifficulty; // will hold the selected difficulty level
+let currentCategory; // will hold the selected category for database questions
 let score;
 
 // HTML elements
@@ -185,8 +186,47 @@ function endGame() {
     endMessage.textContent = "Better luck next time! You scored " + finalScore + " out of " + currentQuestionSet.length + ".";
 }
 
+function loadQuestionSet() {
+  currentQuestionSet = questions.filter(q => q.difficulty === difficulty);
+  currentQuestionIndex = 0;
+  if (currentDifficulty === 'database') {
+   // Fetch questions of the selected category from the database
+    supabaseClient
+      .from('trivia_questions')
+      .select('*')
+      .eq('category', currentCategory)
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error fetching questions:', error);
+          alert('Error fetching questions from database. Please try again later.');
+          return;
+        }
+        if (!data || data.length === 0) {
+          alert('No questions found for this category in the database.');
+          return;
+        }
+        // Map the fetched data to the question format used in the game
+        currentQuestionSet = data.map(row => {
+          let answers = row.answers;
+          if (typeof answers === 'string') {
+            try { answers = JSON.parse(answers); } catch (e) { answers = [row.answers]; }
+          }
+          if (!Array.isArray(answers)) answers = [answers];
+
+          return {
+            question: row.question ?? row.question_text ?? '',
+            answers: answers,
+            correctIndex: Number.isInteger(row.correct_index) ? row.correct_index : (row.correctIndex ?? 0),
+            points: row.points ?? 10,
+            difficulty: 'database',
+            category: row.category
+          };
+        });
+      })
+    }
+}
+
 function loadQuestion() {
-  currentQuestionSet = questions.filter(q => q.difficulty === currentDifficulty);
   if (currentQuestionIndex < currentQuestionSet.length) {
     // assign qObj to be the current questions object
     const qObj = currentQuestionSet[currentQuestionIndex];  // index starts at 0
@@ -245,7 +285,6 @@ function customQuestionsSetup() {
     customQuestionInput.value = '';
     customAnswerInputs.forEach(input => input.value = '');
     customIndexInput.value = '';
-    customCategoryInput.value = '';
   });
 
   // Add event listener to the add question button
@@ -292,7 +331,35 @@ async function submitQuestion(questionText, answerText, correctIndex, category) 
   }
 }
 
-
+function loadCategories() {
+  // Fetch distinct categories from the database and create buttons for each category
+  supabaseClient
+    .from('trivia_questions')
+    .select('category', { count: 'exact', distinct: true })
+    .then(({ data, error }) => {
+      if (error) {
+        console.error('Error fetching categories:', error);
+        alert('Error fetching categories from database. Please try again later.');
+        return;
+      }
+      if (!data || data.length === 0) {
+        alert('No categories found in the database.');
+        return;
+      }
+      data.forEach(row => {
+        const category = row.category;
+        const btn = document.createElement('button');
+        btn.textContent = category;
+        btn.className = 'category-buttons-scrollable';
+        btn.addEventListener('click', function () {
+          currentDifficulty = 'database';
+          currentCategory = category;
+          loadQuestionSet();
+        });
+        categoryButtonsContainer.appendChild(btn);
+      });
+    });
+  }
 
 // The pre-game setup before the user starts playing.
 function preGame() {
@@ -312,6 +379,8 @@ function playGame() {
   difficultyScreen.style.display = 'none';
   // hide the custom questions screen in case user is coming from there
   customQuestionsScreen.style.display = 'none';
+  // hide the category screen in case user is coming from there
+  categoryScreen.style.display = 'none';
   // Display the question screen
   questionScreen.style.display = 'block';
   // ask a question
@@ -346,14 +415,17 @@ function initialize() {
   // Add event listeners to difficulty buttons
   easyBtn.addEventListener('click', function () {
     currentDifficulty = 'easy';
+    loadQuestionSet(); // Load the question set for the selected difficulty
     playGame(); // Start the game immediately after selecting difficulty
   });
   mediumBtn.addEventListener('click', function () {
     currentDifficulty = 'medium';
+    loadQuestionSet(); // Load the question set for the selected difficulty
     playGame(); // Start the game immediately after selecting difficulty
   });
   hardBtn.addEventListener('click', function () {
     currentDifficulty = 'hard';
+    loadQuestionSet(); // Load the question set for the selected difficulty
     playGame(); // Start the game immediately after selecting difficulty
   });
   customBtn.addEventListener('click', function () {
@@ -366,6 +438,7 @@ function initialize() {
     currentDifficulty = 'database';
     difficultyScreen.style.display = 'none';
     categoryScreen.style.display = 'block';
+    loadCategories();
   });
 }
 //-----------------------------------------------------------------------------------------
