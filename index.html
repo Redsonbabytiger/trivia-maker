@@ -53,12 +53,16 @@
         <h2>Correct Answer Index</h2>
         <input type="text" id="custom-index-input" placeholder="Enter correct index number (0-3)" />
         <h2>Category</h2>
-        <input type="text" id="custom-category-input" placeholder="Enter category for this question" />
+        <div class="search-container">
+        <!-- autocomplete="off" stops browser defaults from clashing with yours -->
+         <ul id="suggestions-list" class="suggestions"></ul>
+         <input type="text" id="custom-category-input" placeholder="Enter category for this question" autocomplete="off"/>
+        </div>
       </div>
-      <div id="custom-buttons-container">
-        <button class="big-btn" id="custom-question-btn">Add Question to Game</button>
-        <button class="big-btn" id="database-question-btn">Add Question to Database</button>
-        <button class="big-btn" id="start-custom-btn">Start Custom Quiz</button>
+      <div id="custom-buttons-container" class="big-btn">
+        <button id="custom-question-btn">Add Question to Game</button>
+        <button id="database-question-btn">Add Question to Database</button>
+        <button id="start-custom-btn">Start Custom Quiz</button>
       </div>
     </div>
 
@@ -94,7 +98,6 @@
     </div>
 
   </div>
-  <script src="supabase.js"></script>
   <script src="TriviaGame.js"></script>
 </body>
 </html>

@@ -4,10 +4,9 @@
 */
 
 // Initialize Supabase client
-import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = 'https://jttqmvliuevibobxrsuq.supabase.co';
 const supabaseKey = 'sb_publishable_u8uXsKx79GR-Qs4eH5c6jg_LdUIe7G8';
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // Fetch the base questions from supabase and store them in the questions array
 async function fetchBaseQuestions() {
