@@ -10,24 +10,22 @@
 </head>
 
 <body>
+
+  <!-- BANNER AS HEADER -->
+  <header>
+      <img src="quiz.png" alt="Quiz Logo">
+      <span>Trivia Maker</span>
+  </header>
+
   <div id="game-container">
 
     <!-- SCREEN 1: Start -->
     <div id="start-screen">
-      <h1>🧠 JavaScript Trivia Maker</h1>
-      <p>Test your JavaScript knowledge! Answer all questions from your selected difficulty to get your final score.</p>
-      <p>You can also create custom questions or choose from database questions.</p>
-      <button class="big-btn" id="start-btn">Start Game</button>
-    </div>
-
-    <!-- SCREEN 2: Choose Difficulty -->
-    <div id="difficulty-screen">
-      <h1>Choose Difficulty</h1>
-      <button class="big-btn" id="easy-btn">Easy</button>
-      <button class="big-btn" id="medium-btn">Medium</button>
-      <button class="big-btn" id="hard-btn">Hard</button>
-      <button class="big-btn" id="custom-btn">Custom</button>
-      <button class="big-btn" id="database-btn">Database Questions</button>
+      <p>Welcome to The Trivia Maker! This tool will help you improve your knowledge on various topics.</p>
+      <p>This tool will allow you to create custom questions or play through a variety of public questions.</p>
+      <button class="big-btn" id="custom-btn">Create Your Own Questions</button>
+      <button class="big-btn" id="database-btn">Play Public Questions</button>
+   
     </div>
 
     <!-- SCREEN 3: Create Custom Questions -->
@@ -41,28 +39,48 @@
       <div id="custom-questions-container">
         <h2>Your Custom Question(s)</h2>
         <input type="text" id="custom-question-input" placeholder="Enter your question here" />
-        <h2>Answers</h2>
-        <h3>Answer 1</h3>
-        <input type="text" id="custom-answer-one" placeholder="Answer 1" />
-        <h3>Answer 2</h3>
-        <input type="text" id="custom-answer-two" placeholder="Answer 2" />
-        <h3>Answer 3</h3>
-        <input type="text" id="custom-answer-three" placeholder="Answer 3" />
-        <h3>Answer 4</h3>
-        <input type="text" id="custom-answer-four" placeholder="Answer 4" />
-        <h2>Correct Answer Index</h2>
-        <input type="text" id="custom-index-input" placeholder="Enter correct index number (0-3)" />
-        <h2>Category</h2>
-        <div class="search-container">
-        <!-- autocomplete="off" stops browser defaults from clashing with yours -->
-         <ul id="suggestions-list" class="suggestions"></ul>
-         <input type="text" id="custom-category-input" placeholder="Enter category for this question" autocomplete="off"/>
-        </div>
+        <h2>Options</h2>
+        <table>
+          <tr>
+            <td>
+              <h3>Option 1</h3>
+              <input type="text" id="custom-answer-one" placeholder="Answer 1" autocomplete="off"/>
+            </td>
+            <td>
+              <h3>Option 2</h3>
+              <input type="text" id="custom-answer-two" placeholder="Answer 2" autocomplete="off"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h3>Option 3</h3>
+              <input type="text" id="custom-answer-three" placeholder="Answer 3" autocomplete="off"/>
+            </td>
+            <td>
+              <h3>Option 4</h3>
+              <input type="text" id="custom-answer-four" placeholder="Answer 4" autocomplete="off"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h2>Correct Answer Index</h2>
+              <input type="text" id="custom-index-input" placeholder="Enter correct index number (0-3)" />
+            </td>
+            <td>
+              <h2>Category</h2>
+              <div class="search-container">
+              <!-- autocomplete="off" stops browser defaults from clashing with yours -->
+              <ul id="suggestions-list" class="suggestions"></ul>
+              <input type="text" id="custom-category-input" placeholder="Enter category for this question" autocomplete="off"/>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div id="custom-buttons-container" class="big-btn">
-        <button id="custom-question-btn">Add Question to Game</button>
-        <button id="database-question-btn">Add Question to Database</button>
-        <button id="start-custom-btn">Start Custom Quiz</button>
+      <div id="custom-buttons-container">
+        <button id="custom-question-btn" class="big-btn">Add Question to Your Quiz</button>
+        <button id="database-question-btn" class="big-btn">Submit Question to The Database</button>
+        <button id="start-custom-btn" class="big-btn">Start Your Custom Quiz</button>
       </div>
     </div>
 
@@ -98,6 +116,11 @@
     </div>
 
   </div>
+
+  <footer>© 2026, Brigham Johns, Alvin Ai, Shivin Agrawal</footer>
+
+  <script src="TriviaSetup.js"></script>
   <script src="TriviaGame.js"></script>
+  <script src="TriviaPage.js"></script>
 </body>
 </html>
