@@ -84,6 +84,10 @@ function checkAnswer(selectedIndex, questionObj) {
 //  - clear the feedback text 
 // Else, call endGame()
 // Finish the game
+
+const rewardBtn = document.getElementById('pong-game');
+rewardBtn.style.display = 'none';
+
 function endGame() {
   let finalScore = score;
   
@@ -105,6 +109,7 @@ function endGame() {
   const endMessage = endScreen.querySelector('#end-message');
   if (finalScore === currentQuestionSet.length) {
     endMessage.textContent = finalScore + "/" + currentQuestionSet.length + " Perfect score! You're a trivia wizard! 🧙";
+    rewardBtn.style.display = 'block';
   }
   else if (finalScore >= currentQuestionSet.length / 2) {
     endMessage.textContent = "Good job! You scored " + finalScore + " out of " + currentQuestionSet.length + ".";
