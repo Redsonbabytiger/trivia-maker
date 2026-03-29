@@ -253,6 +253,15 @@ body {
 #end-screen {
   display: none;
   text-align: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#end-screen .big-btn {
+  margin-top: 0;
 }
 
 .answer-btn, .big-btn, #category-screen button {
@@ -261,6 +270,11 @@ body {
 
 .answer-btn:hover, .big-btn:hover, #category-screen button:hover {
   transform: scale(1.05);
+}
+
+#restart-btn {
+  display: flex;
+  gap: 10px;
 }
 
 .progress-bar-container {

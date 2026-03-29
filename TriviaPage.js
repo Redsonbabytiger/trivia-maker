@@ -60,7 +60,7 @@ function checkAnswer(selectedIndex, questionObj) {
   else {
     buttons[selectedIndex].className += ' incorrect';
     feedbackText.textContent = "Not quite! ❌";
-    buttons[questionObj.correctIndex].className += ' correct';
+    buttons[questionObj.correctIndex-1].className += ' correct';
   }
   // Loop through and disable all buttons (buttons[i].disabled = true;)
   for (let i = 0; i < buttons.length; i++) {
@@ -86,6 +86,9 @@ function checkAnswer(selectedIndex, questionObj) {
 // Finish the game
 
 const rewardBtn = document.getElementById('pong-game');
+rewardBtn.addEventListener('click', function () {
+  window.location.href = 'pong.html';
+});
 rewardBtn.style.display = 'none';
 
 function endGame() {
