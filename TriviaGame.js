@@ -61,6 +61,8 @@ function loadQuestionSet() {
 function customQuestionsSetup() {
   const addQuestionBtn = document.querySelector('#custom-question-btn');
   const startCustomBtn = document.querySelector('#start-custom-btn');
+  addQuestionBtn.style.display = 'none';
+  startCustomBtn.style.display = 'none';
   const databaseQuestionBtn = document.querySelector('#database-question-btn');
   const customIndexInput = document.querySelector('#custom-index-input');
   const customQuestionInput = document.querySelector('#custom-question-input');

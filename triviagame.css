@@ -97,6 +97,8 @@ footer {
 }
 
 img {
+  max-width: 100%;
+  height: auto;
   width: 200px;
   padding: 20px;
   padding-top: 30px;
@@ -196,7 +198,7 @@ body {
 }
 
 #custom-questions-container {
-  display: flex;flex-direction: column;
+  display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
@@ -398,4 +400,41 @@ body {
 .hidden-feature {
   display: none;
   color: #50C878;
+}
+
+/* Mobile Responsive Overrides */
+@media (max-width: 1200px) {
+    #game-container {
+        width: 95%;          /* Let the container shrink to the screen width */
+        margin-top: 180px;   /* Extra space because header text wraps */
+        padding: 20px;       /* Smaller padding for more content room */
+    }
+
+    header {
+        font-size: 32px;     /* Smaller title so it doesn't overflow */
+        flex-direction: column; /* Stack logo and text vertically */
+        gap: 5px;
+        padding: 10px;
+    }
+
+    header img {
+        width: 80px;         /* Smaller logo for mobile */
+    }
+
+    footer {
+        font-size: 14px;     /* Smaller footer text */
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;   /* Scale down headings */
+    }
+
+    #question-text {
+        font-size: 1.1rem;   /* Ensure questions are readable but fit */
+    }
+
+    .category-buttons-container {
+        flex-wrap: wrap;     /* Allow buttons to wrap to next line */
+    }
 }
