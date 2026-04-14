@@ -172,5 +172,18 @@ function loadCategories() {
         });
         categoryButtonsContainer.appendChild(btn);
       });
+      // Add an additional category button that reads from The Open Trivia Database api instead of our database
+      const apiBtn = document.createElement('button');
+      apiBtn.textContent = 'Open Trivia API (10 any category questions)';
+      apiBtn.className = 'category-buttons-scrollable';
+      apiBtn.addEventListener('click', function () {
+        currentDifficulty = 'api';
+        currentCategory = 'Random API Category';
+        alert("Don't choose this category as it hasn't been implemented yet! It will be added in a future update. For now, please choose a different category.");
+        //loadQuestionSet().then(() => {
+        //  playGame();
+        //});
+      });
+      categoryButtonsContainer.appendChild(apiBtn);
     });
   }
