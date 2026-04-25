@@ -50,7 +50,7 @@ function loadQuestionSet() {
 
         currentQuestionSet = [...currentQuestionSet, ...mappedQuestions];
       });
-  }
+  } else if (currentDifficulty === 'api') {}
 
   // Non-database difficulty: filter local questions
   currentQuestionSet = questions.filter(q => q.difficulty === currentDifficulty);
@@ -63,6 +63,7 @@ function customQuestionsSetup() {
   const startCustomBtn = document.querySelector('#start-custom-btn');
   addQuestionBtn.style.display = 'none';
   startCustomBtn.style.display = 'none';
+  const returnMainMenuBtn = document.querySelector('#main-menu-btn');
   const databaseQuestionBtn = document.querySelector('#database-question-btn');
   const customIndexInput = document.querySelector('#custom-index-input');
   const customQuestionInput = document.querySelector('#custom-question-input');
@@ -78,6 +79,12 @@ function customQuestionsSetup() {
   startCustomBtn.addEventListener('click', function () {
     currentDifficulty = 'custom';
     playGame();
+  });
+
+  // Add event listener to the main menu button
+  returnMainMenuBtn.addEventListener('click', function () {
+    customQuestionsScreen.style.display = 'none';
+    startScreen.style.display = 'block';
   });
 
   // Add event listener to the database question button

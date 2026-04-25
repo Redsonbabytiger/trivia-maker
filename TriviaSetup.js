@@ -46,7 +46,6 @@ function playGame() {
 function resetGame() {
   endScreen.style.display = 'none';
   startScreen.style.display = 'block';
-  preGame();
 }
 
 // Execution starts here: Set up the start end restart buttons that will, when clicked, get the game rolling
