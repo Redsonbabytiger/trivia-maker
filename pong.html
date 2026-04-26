@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JS Ping Pong - Difficulty Mode</title>
+<title>JS Ping Pong - Improved AI</title>
 
 <style>
 body {
@@ -19,7 +19,7 @@ body {
 }
 
 .controls {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 button.diff {
@@ -34,6 +34,16 @@ button.diff {
 .easy { background: #2ecc71; }
 .medium { background: #f1c40f; }
 .hard { background: #e74c3c; }
+
+#difficulty-indicator {
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+#current-difficulty {
+    font-weight: bold;
+    color: #bdc3c7;
+}
 
 #game-container {
     position: relative;
@@ -65,6 +75,8 @@ canvas {
     border: none;
     color: white;
     border-radius: 5px;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 </style>
 </head>
@@ -76,6 +88,10 @@ canvas {
     <button class="diff easy" onclick="setDifficulty('easy')">Easy</button>
     <button class="diff medium" onclick="setDifficulty('medium')">Medium</button>
     <button class="diff hard" onclick="setDifficulty('hard')">Hard</button>
+</div>
+
+<div id="difficulty-indicator">
+    Difficulty: <span id="current-difficulty">Not Selected</span>
 </div>
 
 <div id="game-container">
@@ -94,26 +110,15 @@ const playBtn = document.getElementById("playBtn");
 const WINNING_SCORE = 5;
 
 let gameRunning = false;
-let isGameOver = false;
+let selectedDifficulty = null;
 
-// 🎚 Difficulty settings
+// Difficulty config
 let difficulty = {
     aiSpeed: 3.5,
     error: 30,
-    reaction: 10
+    smoothing: 0.08,
+    maxSpeed: 3.5
 };
-
-function setDifficulty(level) {
-    if (level === "easy") {
-        difficulty = { aiSpeed: 2.5, error: 60, reaction: 18 };
-    } else if (level === "medium") {
-        difficulty = { aiSpeed: 3.5, error: 30, reaction: 10 };
-    } else if (level === "hard") {
-        difficulty = { aiSpeed: 5, error: 10, reaction: 4 };
-    }
-
-    resetGame();
-}
 
 // Game objects
 const ball = {
@@ -138,10 +143,14 @@ const computer = {
     x: canvas.width / 2 - 40,
     y: 20,
     width: 80,
-    height: 10
+    height: 10,
+    vx: 0
 };
 
 const keys = { a: false, d: false };
+
+// Disable play initially
+playBtn.disabled = true;
 
 // Input
 window.addEventListener("keydown", e => {
@@ -159,13 +168,46 @@ canvas.addEventListener("touchmove", e => {
     user.x = touchX - user.width / 2;
 });
 
-// Start
+// Difficulty selection
+function setDifficulty(level) {
+    selectedDifficulty = level;
+
+    if (level === "easy") {
+        difficulty = { aiSpeed: 2.2, error: 80, smoothing: 0.05, maxSpeed: 2.5 };
+    } else if (level === "medium") {
+        difficulty = { aiSpeed: 3.5, error: 40, smoothing: 0.08, maxSpeed: 3.5 };
+    } else if (level === "hard") {
+        difficulty = { aiSpeed: 5, error: 12, smoothing: 0.12, maxSpeed: 5 };
+    }
+
+    // UI update
+    const label = document.getElementById("current-difficulty");
+    label.textContent = level.toUpperCase();
+
+    if (level === "easy") label.style.color = "#2ecc71";
+    if (level === "medium") label.style.color = "#f1c40f";
+    if (level === "hard") label.style.color = "#e74c3c";
+
+    // Highlight button
+    document.querySelectorAll(".diff").forEach(btn => btn.style.outline = "none");
+    document.querySelector("." + level).style.outline = "3px solid white";
+
+    // Enable play
+    playBtn.disabled = false;
+    playBtn.style.opacity = "1";
+    playBtn.style.cursor = "pointer";
+
+    resetGame();
+}
+
+// Start game
 playBtn.onclick = () => {
+    if (!selectedDifficulty) return;
     overlay.style.display = "none";
     gameRunning = true;
 };
 
-// Reset game (used for difficulty switching)
+// Reset
 function resetGame() {
     user.score = 0;
     computer.score = 0;
@@ -180,19 +222,7 @@ function resetBall() {
     ball.velocityY = -ball.velocityY;
 }
 
-// 🏁 Win check restored
-function checkWin() {
-    if (user.score >= WINNING_SCORE) {
-        alert("You win!");
-        window.location.href = "index.html";
-    }
-    if (computer.score >= WINNING_SCORE) {
-        alert("Computer wins!");
-        window.location.href = "index.html";
-    }
-}
-
-// AI prediction
+// Predict AI target
 function predictBallX() {
     let x = ball.x;
     let y = ball.y;
@@ -206,37 +236,49 @@ function predictBallX() {
         if (x < ball.radius || x > canvas.width - ball.radius) {
             vx = -vx;
         }
+
+        vx *= 0.999;
     }
     return x;
 }
 
 let aiTargetX = canvas.width / 2;
-let aiTimer = 0;
 
 function update() {
-    if (!gameRunning || isGameOver) return;
+    if (!gameRunning) return;
 
     // Player
     if (keys.a) user.x -= user.speed;
     if (keys.d) user.x += user.speed;
 
-    // AI
+    // AI logic
+    let center = computer.x + computer.width / 2;
+    let desiredX;
+
     if (ball.velocityY < 0) {
-        aiTimer++;
-        if (aiTimer > difficulty.reaction) {
-            aiTargetX = predictBallX() + (Math.random() - 0.5) * difficulty.error;
-            aiTimer = 0;
-        }
-
-        let center = computer.x + computer.width / 2;
-        let diff = aiTargetX - center;
-
-        if (Math.abs(diff) > 3) {
-            computer.x += Math.sign(diff) * difficulty.aiSpeed;
-        }
+        let prediction = predictBallX();
+        let dynamicError = Math.sin(Date.now() * 0.002) * difficulty.error;
+        desiredX = prediction + dynamicError;
+    } else {
+        desiredX = canvas.width / 2;
     }
 
-    // Ball
+    aiTargetX += (desiredX - aiTargetX) * difficulty.smoothing;
+
+    let diff = aiTargetX - center;
+
+    computer.vx += diff * 0.002;
+    computer.vx *= 0.9;
+
+    if (computer.vx > difficulty.maxSpeed) computer.vx = difficulty.maxSpeed;
+    if (computer.vx < -difficulty.maxSpeed) computer.vx = -difficulty.maxSpeed;
+
+    computer.x += computer.vx;
+
+    // Clamp AI
+    computer.x = Math.max(0, Math.min(canvas.width - computer.width, computer.x));
+
+    // Ball movement
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
 
@@ -259,13 +301,11 @@ function update() {
     if (ball.y < 0) {
         user.score++;
         resetBall();
-        checkWin();
     }
 
     if (ball.y > canvas.height) {
         computer.score++;
         resetBall();
-        checkWin();
     }
 }
 
