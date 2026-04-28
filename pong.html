@@ -12,14 +12,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    justify-content: flex-start; /* changed */
+    min-height: 100vh;
     color: white;
     font-family: Arial, sans-serif;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .controls {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 button.diff {
@@ -48,20 +51,23 @@ button.diff {
 #game-container {
     position: relative;
     touch-action: none;
+    width: min(90vw, 400px);
 }
 
 canvas {
     background-color: #34495e;
     border: 4px solid #ecf0f1;
     border-radius: 5px;
+    width: min(90vw, 400px);
+    height: auto;
 }
 
 #overlay {
     position: absolute;
     top: 0;
     left: 0;
-    width: 400px;
-    height: 600px;
+    width: 100%;
+    aspect-ratio: 2 / 3; /* matches 400x600 */
     background: rgba(0,0,0,0.6);
     display: flex;
     align-items: center;
